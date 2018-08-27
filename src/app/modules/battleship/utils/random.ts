@@ -1,7 +1,7 @@
-export function randomFrom0to9(): number {
-    return Math.floor(Math.random() * 10);
+export function getRandomNumber(base: number): number {
+    return Math.floor(Math.random() * base);
 }
 
-export function randomBoolean(): boolean {
+export function getRandomBoolean(): boolean {
     return !!Math.floor(Math.random() * 2);
 }
