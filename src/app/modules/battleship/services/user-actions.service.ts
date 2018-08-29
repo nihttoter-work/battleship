@@ -16,12 +16,12 @@ export class UserActionsService {
       const killedShip = ships.find(ship => ship.id === cell.shipId);
       killedShip.squares.forEach(shipCell => {
         square
-        .filter(squareCell =>
-          squareCell.y >= shipCell.y - 1 &&
-          squareCell.y <= shipCell.y + 1 &&
-          squareCell.x >= shipCell.x - 1 &&
-          squareCell.x <= shipCell.x + 1
-        ).forEach(nearestCell => nearestCell.isShooted = true)
+          .filter(squareCell =>
+            squareCell.y >= shipCell.y - 1 &&
+            squareCell.y <= shipCell.y + 1 &&
+            squareCell.x >= shipCell.x - 1 &&
+            squareCell.x <= shipCell.x + 1
+          ).forEach(nearestCell => nearestCell.isShooted = true);
       });
     }
   }

@@ -3,7 +3,7 @@
     <table cellspacing=0>
       <tr *ngFor="let row of rows">
         <ng-container *ngFor="let cell of cells">
-          <app-cell (cellClick)="shoot($event)" [cell]="getCell(row, cell)"></app-cell>
+          <app-cell (cellClick)="shoot($event)" [cell]="getCell(cell, row)"></app-cell>
         </ng-container>
       </tr>
     </table>

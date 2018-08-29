@@ -22,7 +22,7 @@ export class ShipService {
     const cells: any[] = square
       .filter(cell => !cell.isOccupied)
       .map(cell => {
-        return {...cell, checked: false};
+        return { ...cell, checked: false };
       });
 
     while (cells.some(cell => !cell.checked)) {
@@ -36,14 +36,17 @@ export class ShipService {
         } else {
           newSquare = this.trySetIShipHorisontaly(square, ship, randomCell) || this.trySetIShipVerticaly(square, ship, randomCell);
         }
+      }
+      if (ship.shipForm === 'L') {
+        newSquare = this.trySetLShipHorisontaly(square, ship, randomCell);
+      }
 
-        if (newSquare) {
-          return newSquare;
-        }
+      if (newSquare) {
+        return newSquare;
+      }
 
-        if (!newSquare) {
-          (randomCell as any).checked = true;
-        }
+      if (!newSquare) {
+        (randomCell as any).checked = true;
       }
     }
   }
@@ -120,5 +123,54 @@ export class ShipService {
       });
 
     return cells;
+  }
+
+  trySetLShipHorisontaly(square: Square[], ship: Ship, startPossition: Square) {
+    const cells = [...square];
+    const possiblePossitions = cells
+      .filter((cell: Square) =>
+        !cell.isOccupied &&
+        cell.y >= startPossition.y &&
+        cell.y <= startPossition.y + 1 &&
+        cell.x >= startPossition.x &&
+        cell.x <= startPossition.x + 2
+      );
+    const isPossibleToSet = 6 === possiblePossitions.length;
+
+    if (!isPossibleToSet) {
+      return null;
+    }
+
+    const shipType = Random.getRandomNumber(4);
+
+    let cellsToDelete = [];
+    switch (shipType) {
+      case 0:
+        cellsToDelete = [0, 2];
+        break;
+      case 1:
+        cellsToDelete = [2, 4];
+        break;
+      case 2:
+        cellsToDelete = [1, 3];
+        break;
+      case 3:
+        cellsToDelete = [3, 5];
+        break;
+    }
+
+    cellsToDelete.forEach(index => delete possiblePossitions[index]);
+
+    possiblePossitions
+      .forEach(cell => {
+        cell.shipId = ship.id;
+        ship.squares.push(cell);
+      });
+
+    return cells;
+  }
+
+  trySetLShipVerticaly(square: Square[], startPossition: Square) {
+
   }
 }

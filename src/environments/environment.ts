@@ -26,6 +26,10 @@ export const environment: IEnvironment = {
       length: 1,
       shipForm: 'I',
     },
+    {
+      length: 4,
+      shipForm: 'L',
+    },
   ]
 };
 
