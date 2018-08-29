@@ -8,42 +8,105 @@ import * as Random from './../utils/random';
   providedIn: 'root'
 })
 export class ShipService {
-
   constructor() { }
 
-  generateShips(square: Square[][], ship: Ship[]): Ship[] {
+  generateShips(square: Square[], ships: Ship[]): Square[] {
     return [];
   }
 
-  generateShip(square: Square[][], form: ShipForm, length: number) {
-    const cells: Square[] = [].concat(...square).filter(cell => !cell.isOccupied);
+  generateShip(square: Square[], ship: Ship): Square[] {
+    const cells: any[] = square
+      .filter(cell => !cell.isOccupied)
+      .map(cell => {
+        return {...cell, checked: false};
+      });
 
-    let randomCell: Square = cells[Random.getRandomNumber(cells.length - 1)];
-    let isVertical: boolean = Random.getRandomBoolean();
+    while (cells.some(cell => !cell.checked)) {
+      const randomCell: Square = cells[Random.getRandomNumber(cells.length - 1)];
+      const isVertical: boolean = Random.getRandomBoolean();
 
-    if (form == 'I') {
-      if (isVertical) {
-        if (
-          length == [].concat(...square)
-            .filter((cell: Square) =>
-              !cell.isOccupied && cell.y >= randomCell.y && cell.y < randomCell.y + length
-            )
-            .length) {
-              this.setShip(square, randomCell, 'I', length);
+      let newSquare: Square[];
+      if (ship.shipForm === 'I') {
+        if (isVertical) {
+          newSquare = this.trySetIShipVerticaly(square, ship, randomCell) || this.trySetIShipHorisontaly(square, ship, randomCell);
+        } else {
+          newSquare = this.trySetIShipHorisontaly(square, ship, randomCell) || this.trySetIShipVerticaly(square, ship, randomCell);
         }
-        ;
+
+        if (newSquare) {
+          return newSquare;
+        }
+
+        if (!newSquare) {
+          (randomCell as any).checked = true;
+        }
       }
     }
   }
 
-  findNotOccupiedPossition(square: Square[][]) {
+  trySetIShipVerticaly(square: Square[], ship: Ship, startPossition: Square): Square[] {
+    const cells = [...square];
+    const isPossibleToSet = ship.length === cells
+      .filter((cell: Square) =>
+        !cell.isOccupied &&
+        cell.x === startPossition.x &&
+        cell.y >= startPossition.y &&
+        cell.y < startPossition.y + ship.length
+      ).length;
 
+    if (!isPossibleToSet) {
+      return null;
+    }
+
+    cells
+      .filter(cell =>
+        cell.y >= startPossition.y - 1 &&
+        cell.y <= startPossition.y + ship.length &&
+        cell.x >= startPossition.x - 1 &&
+        cell.x <= startPossition.x + 1
+      )
+      .forEach(cell => cell.isOccupied = true);
+
+    cells
+      .filter(cell =>
+        cell.x === startPossition.x &&
+        cell.y >= startPossition.y &&
+        cell.y < startPossition.y + ship.length)
+      .forEach(cell => cell.shipId = ship.id);
+
+    return cells;
   }
 
-  isPossibleToSetShip(square: Square[][], cell: Square, length: number, form: ShipForm) {
-  }
+  trySetIShipHorisontaly(square: Square[], ship: Ship, startPossition: Square): Square[] {
+    const cells = [...square];
+    const isPossibleToSet = ship.length === cells
+      .filter((cell: Square) =>
+        !cell.isOccupied &&
+        cell.y === startPossition.y &&
+        cell.x >= startPossition.x &&
+        cell.x < startPossition.x + ship.length
+      ).length;
 
-  setShip(square: Square[][], startPossition: Square, form: ShipForm, length: number) {
+    if (!isPossibleToSet) {
+      return null;
+    }
 
+    cells
+      .filter(cell =>
+        cell.x >= startPossition.x - 1 &&
+        cell.x <= startPossition.x + ship.length &&
+        cell.y >= startPossition.y - 1 &&
+        cell.y <= startPossition.y + 1
+      )
+      .forEach(cell => cell.isOccupied = true);
+
+    cells
+      .filter(cell =>
+        cell.y === startPossition.y &&
+        cell.x >= startPossition.x &&
+        cell.x < startPossition.x + ship.length)
+      .forEach(cell => cell.shipId = ship.id);
+
+    return cells;
   }
 }

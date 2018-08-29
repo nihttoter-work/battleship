@@ -1,3 +1,10 @@
-<p>
-  square works!
-</p>
+<table cellspacing=0>
+  <tr *ngFor="let row of rows">
+    <ng-container *ngFor="let cell of cells">
+      <app-cell [cell]="getCell(row, cell)"></app-cell>
+    </ng-container>
+  </tr>
+</table>
+
+{{rows | json}}
+{{cells | json}}

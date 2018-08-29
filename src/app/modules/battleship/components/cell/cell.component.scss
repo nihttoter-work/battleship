@@ -1,0 +1,11 @@
+td {
+    width: 50px;
+    height: 50px;
+    border: 1px solid black;
+    &.injured {
+        background-color: red;
+    }
+    &.ship {
+        background-color: burlywood;
+    }
+}
