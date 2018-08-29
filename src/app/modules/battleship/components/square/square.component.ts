@@ -77,7 +77,7 @@ export class SquareComponent implements OnInit {
   shoot(cell: Square) {
     this.userActions.shoot(this.square, this.ships, cell);
     this.score++;
-    this.gameIsOver = this.ships.every(ship => ship.shipState == 'killed')
+    this.gameIsOver = this.ships.every(ship => ship.shipState === 'killed')
   }
 
 }

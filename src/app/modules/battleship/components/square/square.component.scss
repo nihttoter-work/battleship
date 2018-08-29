@@ -2,6 +2,7 @@
   position: relative;
   margin: 0px auto;
   width: max-content;
+  font-family: sans-serif;
 
   table {
     border: 1px solid black;
@@ -37,5 +38,11 @@
       border-color: #1e7e34;
       cursor: pointer;
     }
+  }
+
+  .copyright {
+    margin-top: 5px;
+    text-align: right;
+    width: 100%;
   }
 }
