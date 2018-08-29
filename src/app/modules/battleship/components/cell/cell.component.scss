@@ -1,11 +1,32 @@
 td {
+    position: relative;
     width: 50px;
     height: 50px;
     border: 1px solid black;
-    &.injured {
-        background-color: red;
+    cursor: pointer;
+
+    &:before {
+        position:absolute;
+        content: ' ';
     }
     &.ship {
         background-color: burlywood;
+    }
+    &.injured {
+        background-color: red;
+    }
+    &.occupied {
+        background-color: aqua;
+    }
+
+    div.missed {
+        position: absolute;
+        top: 23px;
+        left: 23px;
+        background-color: sienna;
+        width: 5px;
+        height: 5px;
+        border-radius: 5px;
+
     }
 }

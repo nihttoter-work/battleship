@@ -4,6 +4,7 @@ import { ShipService } from '../../services/ship.service';
 import { UserActionsService } from '../../services/user-actions.service';
 import { Square } from '../../models/square';
 import { Ship } from '../../models/ship';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-square',
@@ -15,6 +16,8 @@ export class SquareComponent implements OnInit {
   ships: Ship[];
   rows: number[];
   cells: number[];
+  score = 0;
+  gameIsOver = false;
 
   constructor(
     public squareService: SquareService,
@@ -23,17 +26,34 @@ export class SquareComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.square = this.squareService.generateSquare(10, 10);
-    this.square = this.shipService.generateShip(this.square, {
-      id: 1,
-      length: 4,
-      shipForm: 'I',
-      shipState: 'unharmed',
-      squares: []
-    });
-    //this.square = this.shipService.generateShips(this.square, []);
+    this.startGame();
+  }
+
+  startGame() {
+    this.score = 0;
+    this.square = this.squareService.generateSquare(environment.squareWidth, environment.squareHeight);
+    this.ships = this.getShipsFromEnv();
+    this.square = this.shipService.generateShips(this.square, this.ships);
+
     this.rows = this.getRows(this.square);
     this.cells = this.getCells(this.square);
+
+    this.gameIsOver = false;
+  }
+
+  getShipsFromEnv(): Ship[] {
+    const ships = [];
+    let id = 1;
+    environment.ships.forEach(ship => {
+      ships.push(new Ship(
+        id,
+        ship.length,
+        ship.shipForm
+      ));
+      id++;
+    });
+
+    return ships;
   }
 
   getRows(square: Square[]): number[] {
@@ -52,6 +72,12 @@ export class SquareComponent implements OnInit {
 
   getCell(x: number, y: number): Square {
     return this.square.find(cell => cell.x === x && cell.y === y);
+  }
+
+  shoot(cell: Square) {
+    this.userActions.shoot(this.square, this.ships, cell);
+    this.score++;
+    this.gameIsOver = this.ships.every(ship => ship.shipState == 'killed')
   }
 
 }

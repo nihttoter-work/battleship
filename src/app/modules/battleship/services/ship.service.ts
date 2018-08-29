@@ -11,7 +11,11 @@ export class ShipService {
   constructor() { }
 
   generateShips(square: Square[], ships: Ship[]): Square[] {
-    return [];
+    let newSquare: Square[] = square;
+    ships.forEach(ship => {
+      newSquare = this.generateShip(newSquare, ship);
+    });
+    return newSquare;
   }
 
   generateShip(square: Square[], ship: Ship): Square[] {
@@ -65,14 +69,19 @@ export class ShipService {
         cell.x >= startPossition.x - 1 &&
         cell.x <= startPossition.x + 1
       )
-      .forEach(cell => cell.isOccupied = true);
+      .forEach(cell => {
+        cell.isOccupied = true;
+      });
 
     cells
       .filter(cell =>
         cell.x === startPossition.x &&
         cell.y >= startPossition.y &&
         cell.y < startPossition.y + ship.length)
-      .forEach(cell => cell.shipId = ship.id);
+      .forEach(cell => {
+        cell.shipId = ship.id;
+        ship.squares.push(cell);
+      });
 
     return cells;
   }
@@ -105,7 +114,10 @@ export class ShipService {
         cell.y === startPossition.y &&
         cell.x >= startPossition.x &&
         cell.x < startPossition.x + ship.length)
-      .forEach(cell => cell.shipId = ship.id);
+      .forEach(cell => {
+        cell.shipId = ship.id;
+        ship.squares.push(cell);
+      });
 
     return cells;
   }

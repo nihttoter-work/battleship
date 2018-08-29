@@ -1,3 +1,5 @@
-<td [class.ship]="!!cell.shipId">
+<td (click)="onCellClick()" [class.ship]="testMode && !!cell?.shipId" [class.injured]="!!cell?.shipId && cell?.isShooted"
+  [class.occupied]="testMode && !cell?.shipId && cell?.isOccupied">
   &nbsp;
+  <div *ngIf="!cell?.shipId && cell?.isShooted" class="missed">&nbsp;</div>
 </td>

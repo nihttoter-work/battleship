@@ -27,4 +27,15 @@ export class Ship {
 
         return null;
     }
+
+    constructor(
+        id,
+        length,
+        shipForm,
+    ) {
+        this.id = id;
+        this.length = length;
+        this.shipForm = shipForm;
+        this.squares = [];
+    }
 }
