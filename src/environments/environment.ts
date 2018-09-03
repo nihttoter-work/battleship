@@ -11,8 +11,7 @@ export const environment: IEnvironment = {
   testMode: true,
   ships: [
     {
-      length: 4,
-      shipForm: 'I',
+      shipForm: 'L',
     },
     {
       length: 4,
@@ -26,6 +25,7 @@ export const environment: IEnvironment = {
       length: 1,
       shipForm: 'I',
     },
+
   ]
 };
 
