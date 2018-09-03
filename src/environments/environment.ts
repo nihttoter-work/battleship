@@ -8,7 +8,7 @@ export const environment: IEnvironment = {
   production: false,
   squareWidth: 10,
   squareHeight: 10,
-  testMode: true,
+  testMode: false,
   ships: [
     {
       shipForm: 'L',
