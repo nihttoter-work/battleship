@@ -47,18 +47,16 @@ export class SquareComponent implements OnInit {
   }
 
   getShipsFromEnv(): Ship[] {
-    const ships = [];
-    let id = 1;
-    environment.ships.forEach(ship => {
-      ships.push(new Ship(
+    let id = 0;
+
+    return environment.ships.map(ship => {
+      id++;
+      return new Ship(
         id,
         ship.length,
         ship.shipForm
-      ));
-      id++;
+      );
     });
-
-    return ships;
   }
 
   getRows(square: Square[]): number[] {
