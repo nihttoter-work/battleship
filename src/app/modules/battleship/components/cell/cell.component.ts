@@ -9,6 +9,8 @@ import { environment } from 'src/environments/environment';
 })
 export class CellComponent implements OnInit {
   @Input() cell: Square;
+  @Input() clickable: boolean;
+  @Input() visible: boolean;
   @Output() cellClick: EventEmitter<Square> = new EventEmitter();
   testMode: boolean;
 

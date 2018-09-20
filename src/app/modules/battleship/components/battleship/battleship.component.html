@@ -1,0 +1,16 @@
+<div class="table-wrapper">
+  <div class="my-square">
+    <app-square #mySquare [visible]="true" [clickable]="false"></app-square>
+  </div>
+  <div class="enemy-square">
+    <app-square #enemySquare [visible]="false" [clickable]="true"></app-square>
+  </div>
+  <div class="copyright">
+    With love by Nikita Serdiuk
+  </div>
+  <div *ngIf="gameIsOver" class="game-over">
+    <div>Game over!!!</div>
+    <div>{{endGameText}}</div>
+    <button (click)="startGame()">Retry</button>
+  </div>
+</div>

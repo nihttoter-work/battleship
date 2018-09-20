@@ -1,10 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { SquareService } from '../../services/square.service';
 import { ShipService } from '../../services/ship.service';
 import { UserActionsService } from '../../services/user-actions.service';
 import { Square } from '../../models/square';
 import { Ship } from '../../models/ship';
 import { environment } from '../../../../../environments/environment';
+import { Subject } from 'rxjs';
+import { getRandomElementOfArray } from '../../utils/random';
+import { AiService } from '../../services/ai.service';
 
 @Component({
   selector: 'app-square',
@@ -12,33 +15,35 @@ import { environment } from '../../../../../environments/environment';
   styleUrls: ['./square.component.scss']
 })
 export class SquareComponent implements OnInit {
+  @Input() clickable: boolean;
+  @Input() visible: boolean;
   square: Square[];
   ships: Ship[];
   rows: number[];
   cells: number[];
+  shoots: Subject<Square> = new Subject<Square>();
+  gameIsOver: Subject<boolean> = new Subject<boolean>();
   score = 0;
-  gameIsOver = false;
 
   constructor(
     public squareService: SquareService,
     public shipService: ShipService,
     public userActions: UserActionsService,
+    public aiService: AiService,
   ) { }
 
   ngOnInit() {
-    this.startGame();
   }
 
   startGame() {
     this.score = 0;
+    this.gameIsOver.next(false);
     this.square = this.squareService.generateSquare(environment.squareWidth, environment.squareHeight);
     this.ships = this.getShipsFromEnv();
     this.square = this.shipService.generateShips(this.square, this.ships);
 
     this.rows = this.getRows(this.square);
     this.cells = this.getCells(this.square);
-
-    this.gameIsOver = false;
   }
 
   getShipsFromEnv(): Ship[] {
@@ -77,7 +82,19 @@ export class SquareComponent implements OnInit {
   shoot(cell: Square) {
     this.userActions.shoot(this.square, this.ships, cell);
     this.score++;
-    this.gameIsOver = this.ships.every(ship => ship.shipState === 'killed')
+    this.shoots.next(cell);
+    this.gameIsOver.next(this.ships.every(ship => ship.shipState === 'killed'));
   }
 
+  randomShoot() {
+    const cell = this.aiService.getCellForShoot(this.square);
+    this.shoot(cell);
+  }
+
+  cellShoot(cell: Square) {
+    if (!this.clickable || cell.isShooted) {
+      return;
+    }
+    this.shoot(cell);
+  }
 }

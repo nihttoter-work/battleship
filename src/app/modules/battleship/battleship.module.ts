@@ -4,19 +4,22 @@ import { SquareComponent } from './components/square/square.component';
 import { SquareService } from './services/square.service';
 import { UserActionsService } from './services/user-actions.service';
 import { CellComponent } from './components/cell/cell.component';
+import { BattleshipComponent } from './components/battleship/battleship.component';
+import { AiService } from './services/ai.service';
 
 @NgModule({
   imports: [
     CommonModule
   ],
   exports: [
-    SquareComponent
+    BattleshipComponent
   ],
   providers: [
     SquareService,
     UserActionsService,
     UserActionsService,
+    AiService,
   ],
-  declarations: [SquareComponent, CellComponent]
+  declarations: [SquareComponent, CellComponent, BattleshipComponent]
 })
 export class BattleshipModule { }

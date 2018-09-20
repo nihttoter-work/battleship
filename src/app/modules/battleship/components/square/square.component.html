@@ -1,19 +1,7 @@
-<div class="table-wrapper">
-  <div>
-    <table cellspacing=0>
-      <tr *ngFor="let row of rows">
-        <ng-container *ngFor="let cell of cells">
-          <app-cell (cellClick)="shoot($event)" [cell]="getCell(cell, row)"></app-cell>
-        </ng-container>
-      </tr>
-    </table>
-    <div *ngIf="gameIsOver" class="game-over">
-      <div>Game over!!!</div>
-      <div>Your score is - {{score}}</div>
-      <button (click)="startGame()">Retry</button>
-    </div>
-  </div>
-  <div class="copyright">
-    With love by Nikita Serdiuk
-  </div>
-</div>
+<table cellspacing=0>
+  <tr *ngFor="let row of rows">
+    <ng-container *ngFor="let cell of cells">
+      <app-cell (cellClick)="cellShoot($event)" [cell]="getCell(cell, row)" [clickable]="clickable" [visible]="visible"></app-cell>
+    </ng-container>
+  </tr>
+</table>
